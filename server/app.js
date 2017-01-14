@@ -1,8 +1,7 @@
 const http = require('http');
 const PORT = process.env.PORT || 3000;
 
-const SimpleRouter = require('./router.js');
-const router = new SimpleRouter();
+const router = require('./router.js')();
 
 router.sendFile('/websocket', __dirname + '/websocket/index.html');
 
