@@ -1,0 +1,26 @@
+{
+  "name": "node-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js --ignore /node_modules",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OsmanMesutOzcan/node-sketches.git"
+  },
+  "keywords": [
+    "nodejs"
+  ],
+  "author": "Osman M. Ozcan <osmanmesutozcan@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OsmanMesutOzcan/node-sketches/issues"
+  },
+  "homepage": "https://github.com/OsmanMesutOzcan/node-sketches#readme",
+  "devDependencies": {
+    "nodemon": "1.11.0"
+  }
+}
