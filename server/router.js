@@ -4,7 +4,7 @@ const http = require('http');
 const url = require('url');
 const fs = require('fs');
 
-/*
+/**
  * Creates a new SimpleRouter instance.
  * @returns {function}
  */
@@ -17,7 +17,7 @@ function SimpleRouter () {
   this.map = {};
 }
 
-/*
+/**
  * Writes a key value pair to the
  * map object.
  * @param urlPath {string} Url to serve the file.
@@ -34,7 +34,7 @@ SimpleRouter.prototype.addRoute = function (urlPath, filePath) {
   this.map[urlPath] = filePath;
 }
 
-/*
+/**
  * Listens the requests for url
  * and writes to response.
  * @param req {object} IncomingRequest
@@ -55,7 +55,7 @@ SimpleRouter.prototype.listen = function (req, res) {
     this._serveStatic(req, res, this.staticFileRoot);
 };
 
-/*
+/**
  * Add Static Files to path.
  * @param path {string} Path for the static directory/file
  */
@@ -70,7 +70,7 @@ SimpleRouter.prototype.static = function (path) {
   this.staticFileRoot = path;
 }
 
-/*
+/**
  * Sends a not found page to the client.
  * Checks the file system if the 404 file exists.
  * If not sends a default response.
@@ -96,7 +96,7 @@ SimpleRouter.prototype._notFound = function (res) {
   res.end(errorPageTemp);
 };
 
-/*
+/**
  * Serve Static Files.
  * @param req {object} IncomingRequest
  * @param res {object} OutgoingResponse
@@ -106,7 +106,7 @@ SimpleRouter.prototype._serveStatic = function (req, res, path) {
   // Do some Magic
 }
 
-/*
+/**
  * Writes a given file to the response.
  * @param req {object} IncomingRequest
  * @param res {object} OutgoingResponse
