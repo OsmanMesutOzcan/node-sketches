@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js --ignore /node_modules",
+    "start": "nodemon index.js --ignore /node_modules /project.org",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
