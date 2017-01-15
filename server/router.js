@@ -13,7 +13,25 @@ function SimpleRouter () {
     return new SimpleRouter();
   }
 
+  this.staticFileRoot = '';
   this.map = {};
+}
+
+/*
+ * Writes a key value pair to the
+ * map object.
+ * @param urlPath {string} Url to serve the file.
+ * @param filePath {string} File to be served.
+ */
+SimpleRouter.prototype.addRoute = function (urlPath, filePath) {
+
+  if (typeof urlPath !== 'string' || typeof filePath !== 'string')
+    throw new TypeError('Argument must be a string.');
+
+  if(!fs.existsSync(filePath))
+    throw new Error('Cannot serve file ' + filePath);
+
+  this.map[urlPath] = filePath;
 }
 
 /*
@@ -32,23 +50,24 @@ SimpleRouter.prototype.listen = function (req, res) {
     this._notFound(res);
   else
     this._writeFileToResponse(req, res, this.map[reqUrlPath]);
+
+  if(this.static && fs.existsSync(this.staticFileRoot))
+    this._serveStatic(req, res, this.staticFileRoot);
 };
 
 /*
- * Writes a key value pair to the
- * map object.
- * @param urlPath {string} Url to serve the file.
- * @param filePath {string} File to be served.
+ * Add Static Files to path.
+ * @param path {string} Path for the static directory/file
  */
-SimpleRouter.prototype.sendFile = function (urlPath, filePath) {
+SimpleRouter.prototype.static = function (path) {
 
-  if (typeof urlPath !== 'string' || typeof filePath !== 'string')
-    throw new TypeError('Argument must be a string.');
+  if (!path || typeof path !== 'string')
+    throw new TypeError('Argument path must be a valid string, instead: ' + typeof path);
 
-  if(!fs.existsSync(filePath))
-    throw new Error('Cannot serve file ' + filePath);
+  if (this.staticFileRoot)
+    throw new Error('Already serving a directory ' + this.staticFileRoot);
 
-  this.map[urlPath] = filePath;
+  this.staticFileRoot = path;
 }
 
 /*
@@ -76,6 +95,16 @@ SimpleRouter.prototype._notFound = function (res) {
 
   res.end(errorPageTemp);
 };
+
+/*
+ * Serve Static Files.
+ * @param req {object} IncomingRequest
+ * @param res {object} OutgoingResponse
+ * @param path {string} Path for the static directory/file
+ */
+SimpleRouter.prototype._serveStatic = function (req, res, path) {
+  // Do some Magic
+}
 
 /*
  * Writes a given file to the response.
