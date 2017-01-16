@@ -5,5 +5,23 @@
     </head>
     <body>
         <h1>Websocket Page</h1>
+        <div id="message"></div>
+        <form action="">
+            <input id="message-input" type="text"></input>
+            <button id="message-submit">Send</button>
+        </form>
+        <script>
+
+         let button = document.getElementById('message-submit');
+         button.addEventListener('click', function (event) {
+           let input = document.getElementById('message-input');
+
+           console.log(input.value);
+
+           input.value = '';
+           event.preventDefault();
+         });
+
+        </script>
     </body>
 </html>
