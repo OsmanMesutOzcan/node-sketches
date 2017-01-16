@@ -13,7 +13,6 @@ function SimpleRouter () {
     return new SimpleRouter();
   }
 
-  this.staticFileRoot = '';
   this.map = {};
 }
 
@@ -50,25 +49,7 @@ SimpleRouter.prototype.listen = function (req, res) {
     this._notFound(res);
   else
     this._writeFileToResponse(req, res, this.map[reqUrlPath]);
-
-  if(this.static && fs.existsSync(this.staticFileRoot))
-    this._serveStatic(req, res, this.staticFileRoot);
 };
-
-/**
- * Add Static Files to path.
- * @param path {string} Path for the static directory/file
- */
-SimpleRouter.prototype.static = function (path) {
-
-  if (!path || typeof path !== 'string')
-    throw new TypeError('Argument path must be a valid string, instead: ' + typeof path);
-
-  if (this.staticFileRoot)
-    throw new Error('Already serving a directory ' + this.staticFileRoot);
-
-  this.staticFileRoot = path;
-}
 
 /**
  * Sends a not found page to the client.
@@ -95,16 +76,6 @@ SimpleRouter.prototype._notFound = function (res) {
 
   res.end(errorPageTemp);
 };
-
-/**
- * Serve Static Files.
- * @param req {object} IncomingRequest
- * @param res {object} OutgoingResponse
- * @param path {string} Path for the static directory/file
- */
-SimpleRouter.prototype._serveStatic = function (req, res, path) {
-  // Do some Magic
-}
 
 /**
  * Writes a given file to the response.
