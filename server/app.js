@@ -13,7 +13,6 @@ const server = http.createServer((req, res) => {
   logger(req, res);
 }).listen(3000, () => console.log('Running on: ' + PORT));
 
-
 const ws = new Websocket(server);
 ws.on('connection', (ws) => {
   ws.send('hello', (data) => console.log(data));
