@@ -3,26 +3,23 @@
 const EventEmitter = require('events');
 const crypto = require('crypto');
 
-const GUID = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11'
+const GUID = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11';
 
 class Websocket extends EventEmitter {
   constructor (server) {
-    super ();
+    super();
 
     this._server = server;
-    this._server.on('upgrade', (req, socket, upgradeHeaders) => {
-      this.upgrade(req, socket, upgradeHeaders, (ws) => {
+    this._server.on('upgrade', (req, socket, head) => {
+      this.upgrade(req, socket, head, (ws) => {
         this.emit(`connection${req.url}`, ws);
         this.emit(`connection`, ws);
       });
     });
-
-    const options = {
-      maxPayload: 8 * 1024 * 1024,
-      server: null
-    };
   }
-  upgrade(req, socket, upgradeHeaders, callback) {
+
+  upgrade(req, socket, head, callback) {
+
     const key = crypto.createHash('sha1')
           .update(req.headers['sec-websocket-key'] + GUID, 'binary')
           .digest('base64');
@@ -34,20 +31,24 @@ class Websocket extends EventEmitter {
       `Sec-WebSocket-Accept: ${key}`
     ];
 
-    this.emit('headers', headers);
+    this.socket = socket;
 
-    socket.write(headers.concat('', '').join('\r\n'));
+    this.emit('headers', headers);
+    this.socket.write(headers.concat('', '').join('\r\n'));
 
     callback(this);
   }
 
-  send (data, callback) {
-    if (!data) data = '';
+  send(data, callback) {
 
+    if (!data) data = '';
     console.log(data);
   }
 
-  close () {
+  close(message) {
+
+    this.emit('close', message);
+    this.socket.destroy();
   }
 }
 

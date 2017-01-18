@@ -11,6 +11,6 @@ const server = http.createServer((req, res) => {
   router.listen(req, res);
 }).listen(3000, () => console.log('Running on: ' + PORT));
 
-const ws = new Websocket(server);
 
+const ws = new Websocket(server);
 ws.on('connection', () => console.log('hi'));
