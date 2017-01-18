@@ -27,9 +27,6 @@ SimpleRouter.prototype.addRoute = function (urlPath, filePath) {
   if (typeof urlPath !== 'string' || typeof filePath !== 'string')
     throw new TypeError('Argument must be a string.');
 
-  if(!fs.existsSync(filePath))
-    throw new Error('Cannot serve file ' + filePath);
-
   this.map[urlPath] = filePath;
 }
 
