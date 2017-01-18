@@ -2,6 +2,7 @@
 
 const EventEmitter = require('events');
 const crypto = require('crypto');
+const buffer = require('buffer');
 
 const GUID = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11';
 
@@ -42,7 +43,7 @@ class Websocket extends EventEmitter {
   send(data, callback) {
 
     if (!data) data = '';
-    console.log(data);
+    callback(data);
   }
 
   close(message) {

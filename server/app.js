@@ -13,4 +13,6 @@ const server = http.createServer((req, res) => {
 
 
 const ws = new Websocket(server);
-ws.on('connection', () => console.log('hi'));
+ws.on('connection', (ws) => {
+  ws.send('hello', (data) => console.log(data));
+});
