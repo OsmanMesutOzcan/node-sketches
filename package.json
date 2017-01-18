@@ -1,7 +1,7 @@
 {
   "name": "node-test",
   "version": "1.0.0",
-  "description": "",
+  "description": "Vanilla nodejs sketches.",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js --ignore /node_modules /project.org",
