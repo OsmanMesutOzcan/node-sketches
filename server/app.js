@@ -1,6 +1,7 @@
 const http = require('http');
 const PORT = process.env.PORT || 3000;
 
+const logger = require('./util.js').logger;
 const router = require('./router.js')();
 const Websocket = require('./websocket/server.js');
 
@@ -9,6 +10,7 @@ router.addRoute('/websocket', __dirname + '/websocket/index.html');
 
 const server = http.createServer((req, res) => {
   router.listen(req, res);
+  logger(req, res);
 }).listen(3000, () => console.log('Running on: ' + PORT));
 
 
