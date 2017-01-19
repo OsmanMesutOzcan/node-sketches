@@ -4,7 +4,8 @@
   "description": "Vanilla nodejs sketches.",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js --ignore /node_modules /project.org",
+    "start": "node index.js" ,
+    "start:watch" : "nodemon index.js --ignore /node_modules /project.org",
     "test": "jest --watch"
   },
   "repository": {
