@@ -1,14 +1,18 @@
 'use strict';
 
+const util = require('util');
 const EventEmitter = require('events');
 const crypto = require('crypto');
 const buffer = require('buffer');
 
 const GUID = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11';
 
-class Websocket extends EventEmitter {
+class WebSocket extends EventEmitter {
   constructor (server) {
     super();
+
+    if (server === undefined)
+      throw new Error('Argv server cannot be empty');
 
     this._server = server;
     this._server.on('upgrade', (req, socket, head) => {
@@ -41,16 +45,17 @@ class Websocket extends EventEmitter {
   }
 
   send(data, callback) {
-
+    // TODO send the buffered data.
     if (!data) data = '';
     callback(data);
   }
 
   close(message) {
-
+    // TODO close the connection, destroy the socket.
     this.emit('close', message);
     this.socket.destroy();
   }
 }
 
-module.exports = Websocket;
+
+module.exports = WebSocket;
