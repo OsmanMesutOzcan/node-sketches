@@ -58,5 +58,4 @@ SimpleRouter.prototype._writeFileToResponse = function (req, res, filePath, fs) 
   res.writeHead(200);
 }
 
-
 module.exports = SimpleRouter;

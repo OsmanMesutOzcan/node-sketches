@@ -15,5 +15,9 @@ const server = http.createServer((req, res) => {
 
 const ws = new Websocket(server);
 ws.on('connection', (ws) => {
-  ws.send('hello', (data) => console.log(data));
+  ws.on('message', (data) => {
+    ws.send(data, data => console.log(data));
+  });
+  ws.emit('message', 'Hello, browser!');  // TODO delete after implementing send
 });
+

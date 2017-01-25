@@ -7,20 +7,18 @@
         <h1>Websocket Page</h1>
         <div id="message"></div>
         <form action="">
-            <input id="message-input" type="text"></input>
+            <input id="message-input" type="text">
             <button id="message-submit">Send</button>
         </form>
         <script>
 
          const ws = new WebSocket('ws://localhost:3000/');
          ws.onopen = () => console.log('open');
+         ws.onmessage = (data) => console.log(data);
 
          let button = document.getElementById('message-submit');
          button.addEventListener('click', function (event) {
            let input = document.getElementById('message-input');
-
-           console.log(input.value);
-
            input.value = '';
            event.preventDefault();
          });

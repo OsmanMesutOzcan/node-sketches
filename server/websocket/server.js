@@ -1,11 +1,29 @@
 'use strict';
 
-const util = require('util');
 const EventEmitter = require('events');
 const crypto = require('crypto');
 const buffer = require('buffer');
 
 const GUID = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11';
+
+class Sender {
+  constructor (socket) {
+    this._socket = socket;
+  }
+
+  handleData(data) {
+    data = String(data);
+    const length = Buffer.byteLength(data);
+    console.log(length);
+    // Handle the data buffer here
+  }
+
+  send(data, callback) {
+    // Implement the send logic here.
+    this.handleData(data);
+    callback(data);
+  }
+}
 
 class WebSocket extends EventEmitter {
   constructor (server) {
@@ -24,7 +42,6 @@ class WebSocket extends EventEmitter {
   }
 
   upgrade(req, socket, head, callback) {
-
     const key = crypto.createHash('sha1')
           .update(req.headers['sec-websocket-key'] + GUID, 'binary')
           .digest('base64');
@@ -37,17 +54,14 @@ class WebSocket extends EventEmitter {
     ];
 
     this.socket = socket;
-
     this.emit('headers', headers);
     this.socket.write(headers.concat('', '').join('\r\n'));
-
+    this._sender = new Sender (socket);
     callback(this);
   }
 
   send(data, callback) {
-    // TODO send the buffered data.
-    if (!data) data = '';
-    callback(data);
+    this._sender.send(data, callback);
   }
 
   close(message) {
