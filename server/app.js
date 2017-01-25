@@ -18,6 +18,5 @@ ws.on('connection', (ws) => {
   ws.on('message', (data) => {
     ws.send(data, data => console.log(data));
   });
-  ws.emit('message', 'Hello, browser!');  // TODO delete after implementing send
+  ws.emit('message', 'Lorem ipsum dolor sit amet');  
 });
-

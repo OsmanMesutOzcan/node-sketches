@@ -1,3 +1,18 @@
+/**
+ * NOTE!
+ *
+ * This is some very trivial implementation of a
+ * server that can handle incoming and outcoming WebSocket
+ * messages as per the definitive framing format.
+ * 
+ * This implementation is written only for education
+ * purposes, it is not a full-featured implementation.
+ * 
+ * Specification (RFC 6455)
+ *
+ */
+
+
 'use strict';
 
 const EventEmitter = require('events');
@@ -6,22 +21,68 @@ const buffer = require('buffer');
 
 const GUID = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11';
 
+/**
+ * The frames you're sending need to be formatted according to the
+ * WebSocket framing format.
+ */
+
 class Sender {
   constructor (socket) {
     this._socket = socket;
   }
 
-  handleData(data) {
+  handleData(data, callback) {
+/**
+ * The first byte will be 1000 0001 (or 129) for a text frame.
+ * It is necessary to determine the length of the raw data so as
+ * to send the length bytes correctly:
+ * 
+ * if 0 <= length <= 125, no  additional bytes
+ * if 126 <= length <= 65535, two additional bytes and the second byte is 126
+ * if length >= 65536,eight additional bytes, and the second byte is 127
+ * 
+ * After the length byte(s) comes the raw data.
+ */
     data = String(data);
-    const length = Buffer.byteLength(data);
-    console.log(length);
-    // Handle the data buffer here
+    let length = Buffer.byteLength(data);
+    let additionalBytes;
+    let buffer;
+
+    switch (true) {
+      case  (length <= 125):
+        additionalBytes = 0;
+        buffer = Buffer.allocUnsafe(additionalBytes + length);
+        buffer[1] = length;
+        break;
+
+      case (length <= 65535):
+        additionalBytes = 2;
+        buffer = Buffer.allocUnsafe(additionalBytes);
+        buffer[1] = 126;
+        buffer.writeUInt16BE(length, 2, true);
+        break;
+
+      case  (length >= 65536):
+        additionalBytes = 8;
+        buffer = Buffer.allocUnsafe(additionalBytes);
+        buffer[1] = 127;
+        buffer.writeUInt32BE(0, 2, true);
+        buffer.writeUInt32BE(length, 6, true);
+        break;
+    }
+
+    buffer[0] = 129;
+    buffer.write(data, 2 + additionalBytes); // Need to retain first 2 bytes.
+    callback(buffer, data);
   }
 
   send(data, callback) {
-    // Implement the send logic here.
-    this.handleData(data);
-    callback(data);
+    let self = this;
+    self.handleData(data, (outputBuffer, msg) => {
+      self._socket.write(outputBuffer);
+      self._socket.write(msg);
+      callback(msg);
+    });
   }
 }
 
