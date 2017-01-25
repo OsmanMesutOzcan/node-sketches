@@ -45,26 +45,26 @@ class Sender {
  */
     data = String(data);
     let length = Buffer.byteLength(data);
-    let additionalBytes;
+    let framingBytes = 2;
     let buffer;
 
     switch (true) {
       case  (length <= 125):
-        additionalBytes = 0;
-        buffer = Buffer.allocUnsafe(additionalBytes + length);
+        framingBytes += 0;
+        buffer = Buffer.allocUnsafe(framingBytes + length);
         buffer[1] = length;
         break;
 
       case (length <= 65535):
-        additionalBytes = 2;
-        buffer = Buffer.allocUnsafe(additionalBytes);
+        framingBytes += 2;
+        buffer = Buffer.allocUnsafe(framingBytes + length);
         buffer[1] = 126;
         buffer.writeUInt16BE(length, 2, true);
         break;
 
       case  (length >= 65536):
-        additionalBytes = 8;
-        buffer = Buffer.allocUnsafe(additionalBytes);
+        framingBytes += 8;
+        buffer = Buffer.allocUnsafe(framingBytes + length);
         buffer[1] = 127;
         buffer.writeUInt32BE(0, 2, true);
         buffer.writeUInt32BE(length, 6, true);
@@ -72,16 +72,15 @@ class Sender {
     }
 
     buffer[0] = 129;
-    buffer.write(data, 2 + additionalBytes); // Need to retain first 2 bytes.
-    callback(buffer, data);
+    buffer.write(data, framingBytes);
+    callback(buffer);
   }
 
   send(data, callback) {
     let self = this;
-    self.handleData(data, (outputBuffer, msg) => {
+    self.handleData(data, (outputBuffer) => {
       self._socket.write(outputBuffer);
-      self._socket.write(msg);
-      callback(msg);
+      callback(outputBuffer);
     });
   }
 }

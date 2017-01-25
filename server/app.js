@@ -18,5 +18,5 @@ ws.on('connection', (ws) => {
   ws.on('message', (data) => {
     ws.send(data, data => console.log(data));
   });
-  ws.emit('message', 'Lorem ipsum dolor sit amet');  
+  ws.emit('message', 'Hello Browser');  
 });

@@ -13,8 +13,8 @@
         <script>
 
          const ws = new WebSocket('ws://localhost:3000/');
-         ws.onopen = () => console.log('open');
-         ws.onmessage = (data) => console.log(data);
+         // ws.onopen = () => console.log('open');
+         ws.onmessage = ({data}) => console.log(data);
 
          let button = document.getElementById('message-submit');
          button.addEventListener('click', function (event) {
