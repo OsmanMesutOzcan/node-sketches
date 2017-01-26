@@ -80,8 +80,22 @@ class Sender {
     let self = this;
     self.handleData(data, (outputBuffer) => {
       self._socket.write(outputBuffer);
-      callback(outputBuffer);
+      if (callback && typeof callback === 'function')
+        callback();
     });
+  }
+}
+
+class Reciever {
+  constructor(socket) {
+    this._socket = socket;
+    this._socket.on('data',
+      data => console.log(data));
+  }
+
+  unpack(data, callback) {
+    // TODO unpack the data here.
+    callback(data);
   }
 }
 
@@ -117,6 +131,7 @@ class WebSocket extends EventEmitter {
     this.emit('headers', headers);
     this.socket.write(headers.concat('', '').join('\r\n'));
     this._sender = new Sender (socket);
+    this._reciever = new Reciever (socket);
     callback(this);
   }
 
