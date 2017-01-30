@@ -13,12 +13,14 @@
         <script>
 
          const ws = new WebSocket('ws://localhost:3000/');
-         ws.onopen = () => ws.send('Hello, Server!');
+         ws.onopen = () => console.log('Opened.');
          ws.onmessage = ({data}) => console.log(data);
+         const send = (str) => { ws.send(`${str}`) };
 
          let button = document.getElementById('message-submit');
          button.addEventListener('click', function (event) {
            let input = document.getElementById('message-input');
+           send(input.value);
            input.value = '';
            event.preventDefault();
          });

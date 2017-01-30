@@ -120,7 +120,8 @@ class WebSocket extends EventEmitter {
   }
 
   getStats(data, callback) {
-  // TODO Get the data stats
+    // Get the data stats
+    // { dataLength, framingBytes, totalLength, maskedData }
     let hasMask = data[1] >= 128;
     let secondByte = hasMask ? (data[1] - 128) : null;
 
@@ -150,7 +151,7 @@ class WebSocket extends EventEmitter {
     if (hasMask) {
       stats.maskedData = data.slice(stats.framingBytes, stats.framingBytes + 4);
       stats.framingBytes += 4;
-    }
+   }
     callback(data, stats);
   }
 
@@ -160,20 +161,17 @@ class WebSocket extends EventEmitter {
     let dataBuf, outputBuf;
 
     if (stats.maskedData) {
-      dataBuf = new Buffer(stats.totalLength, stats.framingBytes);
+      dataBuf = new Buffer(stats.totalLength - stats.framingBytes);
 
-      for (let i = stats.index, j = 0; i < stats.totalLength; i++, j++) {
+      for (let i = stats.framingBytes , j = 0; i < stats.totalLength; i++, j++) {
         dataBuf[j] = data[i] ^ stats.maskedData[j % 4];
-        console.log(dataBuf);
       }
     }
 
     dataArr.push(dataBuf);
+    outputBuf = Buffer.concat(dataArr, stats.totalLength);
+    outputBuf = outputBuf.toString();
 
-    if(stats.length - (stats.length - stats.framingBytes) === 0) {
-      outputBuf = Buffer.concat(dataArr, stats.totalLength);
-      outputBuf = outputBuf.toString();
-    }
     callback(outputBuf);
   }
 
