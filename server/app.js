@@ -14,9 +14,9 @@ const server = http.createServer((req, res) => {
 }).listen(3000, () => console.log('Running on: ' + PORT));
 
 const ws = new Websocket(server);
+
 ws.on('connection', (ws) => {
-  ws.on('message', (data) => {
-    ws.send(data, data => console.log(data));
-  });
-  ws.emit('message', 'Hello Browser');  
+  ws.send('Hello Browser!', () => console.log('sent!'));
+
+  ws.recieve((data) => console.log(data));
 });
