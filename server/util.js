@@ -20,15 +20,12 @@ module.exports = {
 
     res.on('finish', () => {
 
-    let statusCode = res.statusCode;
-
+      let statusCode = res.statusCode;
       let val = statusCode / 100 | 0;
       let style = styles[val]
       let styledStatus = '\u001b[' + style[0] + 'm' + statusCode + '\u001b[' + style[1] + 'm';
 
       console.log(styledStatus + ' ' + method + ' ' + pathname);
-
     });
-
   }
 };
