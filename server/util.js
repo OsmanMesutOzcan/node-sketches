@@ -6,32 +6,25 @@ module.exports = {
 
     let pathname = url.parse(req.url).pathname;
     let method = req.method;
-    let val = [];
 
     const styles = {
-      red: [31, 39],
-      green: [32, 39],
-      yellow: [33, 39],
-      magenta: [35, 39]
+      0: [33, 39], // Yellow
+      1: [32, 39], // Green
+      2: [32, 39], // Green
+      3: [36, 39], // Cyan
+      4: [31, 39], // Red
+      5: [33, 39], // Yellow
     };
+
 
 
     res.on('finish', () => {
 
-      let statusCode = res.statusCode;
+    let statusCode = res.statusCode;
 
-      switch(statusCode) {
-      case 200:
-        val = styles.green;
-        break;
-      case 404:
-        val = styles.red;
-        break;
-      default:
-        val = styles.magenta;
-      }
-
-      let styledStatus = '\u001b[' + val[0] + 'm' + statusCode + '\u001b[' + val[1] + 'm';
+      let val = statusCode / 100 | 0;
+      let style = styles[val]
+      let styledStatus = '\u001b[' + style[0] + 'm' + statusCode + '\u001b[' + style[1] + 'm';
 
       console.log(styledStatus + ' ' + method + ' ' + pathname);
 
