@@ -3,10 +3,8 @@ const url = require("url");
 module.exports = {
 
   logger: function (req, res) {
-
     let pathname = url.parse(req.url).pathname;
     let method = req.method;
-
     const styles = {
       0: [33, 39], // Yellow
       1: [32, 39], // Green
@@ -17,9 +15,7 @@ module.exports = {
     };
 
 
-
     res.on('finish', () => {
-
       let statusCode = res.statusCode;
       let val = statusCode / 100 | 0;
       let style = styles[val]
