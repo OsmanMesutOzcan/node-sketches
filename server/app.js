@@ -18,5 +18,8 @@ const ws = new Websocket(server);
 ws.on('connection', (ws) => {
 
   ws.send('Hello Browser!', () => console.log('sent!'));
-  ws.recieve((data) => console.log(data));
+  ws.recieve((data) => console.log("B: " + data));
+
+  process.stdin.on('data', (data) => ws.send(data.toString()));
 });
+
