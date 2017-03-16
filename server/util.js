@@ -1,8 +1,11 @@
+'use strict'
+
 const url = require("url");
+const http = require("http");
 
 module.exports = {
 
-  logger: function (req, res) {
+  logger: function(req, res) {
     let pathname = url.parse(req.url).pathname;
     let method = req.method;
     const styles = {
@@ -23,5 +26,29 @@ module.exports = {
 
       console.log(styledStatus + ' ' + method + ' ' + pathname);
     });
+  },
+
+
+  methods: function() {
+    return http.METHODS.forEach((method) => {
+      method.toLowerCase();
+    });
+  },
+
+
+  merge: function(destination, source, overrideBase = true) {
+    if(!destination || !source)
+      throw new TypeError("missing destination or source");
+
+    Object.getOwnPropertyNames(source).forEach(function mergeObjects(name){
+      // Skip the unwanted properties.
+      if(!overrideBase && Object.hasOwnProperty.call(destination, name))
+        return;
+
+      let descriptor = Object.getOwnPropertyDescriptor(source, name);
+      Object.defineProperty(destination, name, descriptor);
+    });
+
+    return destination;
   }
 };

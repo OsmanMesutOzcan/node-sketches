@@ -176,7 +176,6 @@ class WebSocket extends EventEmitter {
   }
 
   close(message) {
-    // TODO close the connection, destroy the socket.
     this.emit('close', message);
     this._socket.destroy();
   }

@@ -2,11 +2,11 @@ const http = require('http');
 const PORT = process.env.PORT || 3000;
 
 const logger = require('./util.js').logger;
-const router = require('./router.js')();
+const router = require('./router')();
 const Websocket = require('./websocket/server.js');
 
-router.addRoute('/', __dirname + '/../index.html');
-router.addRoute('/websocket', __dirname + '/websocket/index.html');
+router.static('/', __dirname + '/../index.html');
+router.static('/websocket', __dirname + '/websocket/index.html');
 
 const server = http.createServer((req, res) => {
   router.listen(req, res);
